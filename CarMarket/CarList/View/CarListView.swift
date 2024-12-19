@@ -10,6 +10,11 @@ import SwiftUI
 struct CarListView: View {
 
     @ObservedObject var viewModel: CarListViewModel
+    @State private var showingDetails = false
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
 
     init(viewModel: CarListViewModel) {
         self.viewModel = viewModel
@@ -17,10 +22,19 @@ struct CarListView: View {
 
     var body: some View {
         ZStack {
-            ScrollView(.horizontal) {
-                LazyHStack {
+            Color.background.ignoresSafeArea()
+            ScrollView {
+                LazyVGrid(columns: columns, alignment: .center, spacing: 20) {
                     ForEach(viewModel.cars) { item in
-                        Text(item.description)
+                        Button {
+                            showingDetails.toggle()
+                        } label: {
+                            CarItemView(urlString: item.images?.first, model: item.model, price: item.price)
+                                .frame(height: 300)
+                        }
+                        .sheet(isPresented: $showingDetails) {
+                            CarDetailsView()
+                        }
                     }
                 }
             }

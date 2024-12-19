@@ -14,6 +14,7 @@ final class CarListViewModel: ObservableObject {
         static let invalidStatusCodeError = "Error: invalidStatusCode"
         static let failedToDecodeError = "Error: failedToDecode"
         static let unknownError = "Error: something went wrong"
+        static let invalidURL = "Error: invalid URL"
     }
 
     @MainActor @Published var errorMessage: String?
@@ -25,16 +26,13 @@ final class CarListViewModel: ObservableObject {
         self.carService = carService
     }
 
+    @MainActor
     func loadCars() async {
         do {
             let foundCars = try await carService.fetchCars()
-            await MainActor.run {
-                cars = foundCars.map { .init(with: $0) }
-            }
+            cars = CarMapper.map(response: foundCars)
         } catch {
-            await MainActor.run {
-                errorMessage = handle(error: error)
-            }
+            errorMessage = handle(error: error)
         }
     }
 
@@ -46,6 +44,8 @@ final class CarListViewModel: ObservableObject {
                 return Constant.invalidStatusCodeError
             case CarServiceError.failedToDecode:
                 return Constant.failedToDecodeError
+            case CarServiceError.incorrectURL:
+                return Constant.invalidURL
             default:
                 return Constant.unknownError
             }
