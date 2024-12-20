@@ -20,8 +20,8 @@ struct CarItemView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            makeImage()
+        ImageView(urlString: urlString)
+            .scaledToFill()
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(model)
@@ -37,25 +37,6 @@ struct CarItemView: View {
                     LinearGradient(colors: [Color.black.opacity(0.8).opacity(0.1), Color.black.opacity(0.8)], startPoint: .top, endPoint: .bottom)
                 )
             }
-        }
-    }
-
-    @ViewBuilder
-    private func makeImage() -> some View {
-        if let urlString {
-            AsyncImage(
-                url: URL(string: urlString))
-            { image in
-                image
-                    .resizable()
-            } placeholder: {
-                ProgressView()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-        } else {
-            Rectangle()
-                .fill(Color.blue)
-        }
     }
 }
 

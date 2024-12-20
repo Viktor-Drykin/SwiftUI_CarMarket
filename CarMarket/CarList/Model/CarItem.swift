@@ -14,13 +14,18 @@ struct CarItem: Identifiable {
         let city: String
     }
 
+    struct Image: Identifiable {
+        let id = UUID().uuidString
+        let url: String
+    }
+
     let id: Int
     let model: String
     let price: String
     let firstRegistration: String?
-    let mileage: Int
+    let mileage: String
     let fuel: String
-    let images: [String]?
+    let images: [Image]
     let description: String
     let modelline: String?
     let seller: Seller?

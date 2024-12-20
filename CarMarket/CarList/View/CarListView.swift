@@ -11,6 +11,8 @@ struct CarListView: View {
 
     @ObservedObject var viewModel: CarListViewModel
     @State private var showingDetails = false
+    @State private var selectedCarItem: CarItem?
+    
     private let columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
@@ -27,13 +29,11 @@ struct CarListView: View {
                 LazyVGrid(columns: columns, alignment: .center, spacing: 20) {
                     ForEach(viewModel.cars) { item in
                         Button {
+                            selectedCarItem = item
                             showingDetails.toggle()
                         } label: {
-                            CarItemView(urlString: item.images?.first, model: item.model, price: item.price)
+                            CarItemView(urlString: item.images.first?.url, model: item.model, price: item.price)
                                 .frame(height: 300)
-                        }
-                        .sheet(isPresented: $showingDetails) {
-                            CarDetailsView()
                         }
                     }
                 }
@@ -46,6 +46,9 @@ struct CarListView: View {
                     .font(.headline)
                     .fontWeight(.bold)
             }
+        }
+        .sheet(item: $selectedCarItem) { item in
+            CarDetailsView(carItem: item)
         }
         .task {
             await viewModel.loadCars()

@@ -2,7 +2,7 @@
 //  FeatureFactory.swift
 //  CarMarket
 //
-//  Created by DataArt Viktor Drykin on 18.12.2024.
+//  Created by Viktor Drykin on 18.12.2024.
 //
 
 

@@ -31,7 +31,9 @@ final class CarListViewModel: ObservableObject {
         do {
             let foundCars = try await carService.fetchCars()
             cars = CarMapper.map(response: foundCars)
+            errorMessage = nil
         } catch {
+            cars = []
             errorMessage = handle(error: error)
         }
     }
