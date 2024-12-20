@@ -12,7 +12,7 @@ struct CarListView: View {
     @ObservedObject var viewModel: CarListViewModel
     @State private var showingDetails = false
     @State private var selectedCarItem: CarItem?
-    
+
     private let columns = [
         GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10)
@@ -25,8 +25,8 @@ struct CarListView: View {
     var body: some View {
         ZStack {
             Color.background.ignoresSafeArea()
-            ScrollView {
-                GeometryReader { proxy in
+            GeometryReader { proxy in
+                ScrollView {
                     LazyVGrid(columns: columns, alignment: .center, spacing: 10) {
                         ForEach(viewModel.cars) { item in
                             Button {
@@ -38,9 +38,9 @@ struct CarListView: View {
                         }
                     }
                 }
-            }
-            .refreshable {
-                await viewModel.loadCars()
+                .refreshable {
+                    await viewModel.loadCars()
+                }
             }
             if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
@@ -86,3 +86,4 @@ struct CarListView: View {
     let view = CarListView(viewModel: viewModel)
     return view
 }
+
