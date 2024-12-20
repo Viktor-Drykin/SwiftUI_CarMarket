@@ -11,8 +11,6 @@ struct CarDetailsView: View {
 
     private let carItem: CarItem
 
-    @State var scrolledID: String?
-
     init(carItem: CarItem) {
         self.carItem = carItem
     }
@@ -47,7 +45,7 @@ struct CarDetailsView: View {
                 }
             }
 
-            VStack(alignment: .leading) {
+            HStack {
                 Text("Mileage:")
                     .modifier(Headline())
                 Text(carItem.mileage)
@@ -72,30 +70,20 @@ struct CarDetailsView: View {
     }
 
     private var imagesView: some View {
-        ScrollView(.horizontal) {
-            LazyHStack(alignment: .center) {
-                ForEach(carItem.images) { image in
-                    ImageView(urlString: image.url)
-                        .scaledToFill()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                    //.scrollTargetLayout()
-
+        GeometryReader { proxy in
+            ScrollView(.horizontal) {
+                LazyHStack(alignment: .center, spacing: 0) {
+                    ForEach(carItem.images) { image in
+                        ImageView(urlString: image.url)
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: proxy.size.width, height: 300, alignment: .center)
+                            .border(.blue)
+                            .clipped()
+                    }
                 }
             }
         }
-        //                    .scrollTargetBehavior(.viewAligned)
-        //                    .scrollPosition(id: $scrolledID)
-        .scrollIndicators(.hidden)
         .frame(height: 300)
-    }
-}
-
-struct Headline: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.headline)
-            .fontWeight(.bold)
     }
 }
 

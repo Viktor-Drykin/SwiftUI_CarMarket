@@ -21,7 +21,6 @@ struct CarItemView: View {
 
     var body: some View {
         ImageView(urlString: urlString)
-            .scaledToFill()
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(model)
